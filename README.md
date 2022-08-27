@@ -1,5 +1,7 @@
 This project has been bootstrapped using [pnpm](https://pnpm.io/) and [Vite](https://vitejs.dev/)
 
+[Demo](https://galaxy-finder.vercel.app/)
+
 ### Overview
 
 - ⚡️&nbsp; [Vite](https://vitejs.dev/)
