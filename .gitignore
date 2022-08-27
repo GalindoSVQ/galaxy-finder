@@ -1,0 +1,22 @@
+# Editors
+.idea/
+.vscode/
+
+# Dependencies
+bower_components/
+node_modules/
+
+# Logs
+yarn*.log*
+npm*.log*
+
+# OS Files
+.DS_Store
+.thumbsdb
+dist
+dist-ssr
+*.local
+coverage
+.eslintcache
+.nvmrc
+*.code-workspace
