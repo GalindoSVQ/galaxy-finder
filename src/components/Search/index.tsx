@@ -13,6 +13,7 @@ import {
   useRef,
   useState
 } from 'react';
+import { Spinner } from 'components/Spinner';
 import { LastSearch } from 'types';
 
 type Props = PropsWithChildren & {
@@ -26,9 +27,11 @@ function Search({ currentSearch, children, lastSearchs, setCurrentSearch, setLas
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const hasText = !!inputValue.trim().length;
+  const [loading, setLoading] = useState(false);
 
   const searchButtonHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    setLoading(true);
     const inputValue = inputRef.current?.value.trim() ?? '';
     const findNullValueIndex = lastSearchs.findIndex((search) => search.text === null);
     const notIncludeValue = !lastSearchs.some(({ text }) => text === inputValue);
@@ -57,6 +60,8 @@ function Search({ currentSearch, children, lastSearchs, setCurrentSearch, setLas
     } catch (error) {
       console.error(error);
       throw new Error('Error searchButtonHandler');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,9 +93,11 @@ function Search({ currentSearch, children, lastSearchs, setCurrentSearch, setLas
           placeholder="Searh the Force..."
         />
         {hasText && <XIcon onClick={() => setInputValue('')} />}
-        <ButtonSearch onClick={searchButtonHandler}>Go</ButtonSearch>
+        <ButtonSearch disabled={loading} onClick={searchButtonHandler}>
+          Go
+        </ButtonSearch>
       </Form>
-      {children}
+      {loading ? <Spinner placeholder="Crunching data" /> : children}
     </Container>
   );
 }

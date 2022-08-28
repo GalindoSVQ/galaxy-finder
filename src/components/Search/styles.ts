@@ -67,4 +67,9 @@ export const ButtonSearch = styled.button`
   &:active {
     background-color: ${({ theme }) => theme.colors.light200};
   }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.lightGray50};
+    color: ${({ theme }) => theme.colors.lightGray100};
+  }
 `;
