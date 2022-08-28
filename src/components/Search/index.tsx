@@ -3,6 +3,7 @@ import { ReactComponent as XIcon } from '@icons/x.svg';
 import { capitalize } from '@utilities/format';
 import { getAllEntities } from 'api/getAllEntities';
 import { ButtonSearch, Container, Form, Input } from 'components/Search/styles';
+import { Spinner } from 'components/Spinner';
 import {
   ChangeEvent,
   Dispatch,
@@ -13,7 +14,6 @@ import {
   useRef,
   useState
 } from 'react';
-import { Spinner } from 'components/Spinner';
 import { LastSearch } from 'types';
 
 type Props = PropsWithChildren & {
@@ -41,10 +41,10 @@ function Search({ currentSearch, children, lastSearchs, setCurrentSearch, setLas
         if (findNullValueIndex !== -1) {
           const newState = [...lastSearchs];
           const id = newState[findNullValueIndex].id;
-          const { results } = await getAllEntities(inputValue, id);
+          const { data } = await getAllEntities(inputValue, id);
 
           newState[findNullValueIndex].text = inputValue;
-          newState[findNullValueIndex].results = results;
+          newState[findNullValueIndex].data = data;
 
           setLastSearchs(newState);
           setCurrentSearch(newState[findNullValueIndex]);

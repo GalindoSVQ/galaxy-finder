@@ -18,11 +18,11 @@ export interface Response<T> {
   next: string | null;
   previous: string | null;
   results: Array<T>;
-  path: EntitiesName;
+  entity: EntitiesName;
 }
 
 export interface LastSearch {
   id: string;
   text: string | null;
-  results: Array<Response<Entities>>;
+  data: Array<Response<Entities>>;
 }

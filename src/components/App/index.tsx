@@ -6,14 +6,13 @@ import { Head } from 'components/Head';
 import { Search } from 'components/Search';
 import { LastSearchs } from 'components/Search/LastSearches';
 import { useState } from 'react';
-import { Entities, LastSearch, Response } from 'types';
+import { LastSearch } from 'types';
 
 function App() {
   const [lastSearchs, setLastSearchs] = useState<Array<LastSearch>>(fillLastSearchs);
   const [currentSearch, setCurrentSearch] = useState<LastSearch>(lastSearchs[0]);
 
-  const filterEntity = (entity: string) =>
-    currentSearch.results.find((result) => result.path === entity) as Response<Entities>;
+  const filterEntity = (entity: string) => currentSearch.data?.find((result) => result.entity === entity);
 
   const items = [
     {

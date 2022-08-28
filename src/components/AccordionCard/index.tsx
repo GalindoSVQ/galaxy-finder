@@ -7,26 +7,40 @@ import { Entities, EntitiesName, LastSearch, Response } from 'types';
 
 type Props = {
   currentSearch: LastSearch;
-  data: Response<Entities>;
+  data?: Response<Entities>;
   entity: EntitiesName;
   setLastSearchs: Dispatch<SetStateAction<LastSearch[]>>;
 };
 
 function AccordionCard({ currentSearch, data, entity, setLastSearchs }: Props) {
+  if (!data) {
+    return null;
+  }
+
   const { count, results, next } = data;
   const entityString = capitalize(entity);
+
+  const findSearchIndex = (text: LastSearch['text'], currentSearchs: LastSearch[]) =>
+    currentSearchs.findIndex((search) => search.text === text);
+
+  const findEntityIndex = (entity: EntitiesName, currentSearchs: LastSearch) =>
+    currentSearchs.data.findIndex((result) => result.entity === entity);
 
   const loadMoreHandler = async () => {
     const { results: newResults, next: newNextPage } = await getNextPage(next);
 
     setLastSearchs((currentSearchs) => {
       const newSearchs = [...currentSearchs];
-      const search = newSearchs.find((search) => search.text === currentSearch.text);
-      const entityIndex = search?.results.findIndex((result) => result.path === entity);
+      const searchIndex = findSearchIndex(currentSearch.text, newSearchs);
 
-      if (entityIndex !== undefined && search !== undefined) {
-        search.results[entityIndex].results = search.results[entityIndex].results.concat(newResults);
-        search.results[entityIndex].next = newNextPage;
+      if (currentSearch.text !== null) {
+        const entityIndex = findEntityIndex(entity, newSearchs[searchIndex]);
+
+        newSearchs[searchIndex].data[entityIndex].next = newNextPage;
+        newSearchs[searchIndex].data[entityIndex].results = [
+          ...currentSearchs[searchIndex].data[entityIndex].results,
+          ...newResults
+        ];
       }
 
       return newSearchs;
@@ -36,22 +50,16 @@ function AccordionCard({ currentSearch, data, entity, setLastSearchs }: Props) {
   return (
     <Container>
       {results.length ? (
-        results.map((result) => {
-          return <Card key={result.url} data={result} entity={entity} />;
-        })
+        results.map((result) => <Card key={result.url} data={result} entity={entity} />)
       ) : (
         <p>Yay, no {entityString} found.</p>
       )}
       {!!results.length && (
         <>
           <p>
-            Showing {results?.length} of {count} {entityString}(s)
+            Showing {results.length} of {count} {entityString}(s)
           </p>
-          {next && (
-            <Button disabled={next === undefined} onClick={loadMoreHandler}>
-              {`Load more ${entityString}!`}
-            </Button>
-          )}
+          {next && <Button onClick={loadMoreHandler}>{`Load more ${entityString}!`}</Button>}
         </>
       )}
     </Container>
