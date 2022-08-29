@@ -7,17 +7,17 @@ const mockSearchs = [
   {
     id: '0',
     text: 'FirstSearch',
-    results: []
+    data: []
   },
   {
     id: '1',
     text: 'SecondSearch',
-    results: []
+    data: []
   },
   {
     id: '2',
     text: 'ThirdSearch',
-    results: []
+    data: []
   }
 ];
 
